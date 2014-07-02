@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>node-perf</title>
+    <link rel="stylesheet" href="/static/main.css" type="text/css"/> 
+  </head>
+  <body>
+    <header>
+      <h1>Performance review</h1>
+    </header>
+    {{#vegeta}}
+    <section>
+      <h2>Load test report</h2>
+      {{{ vegeta }}}
+    </section>
+    {{/vegeta}}
+    <section>
+      <h2>GC</h2>
+      <section>
+        <h3>Current Base</h3>
+        <div class="gc-graph base-graph"></div>
+      </section>
+      <section>
+        <h3>Usage trend</h3>
+        <div class="gc-graph usage-trend-graph"></div>
+      </section>
+      <section>
+        <h3>Num GC</h3>
+        <div class="gc-graph num-gc-graph"></div>
+      </section>
+      <section>
+        <h3>Leaks</h3>
+        <table class="leaks">
+          <thead>
+            <tr><td>Start</td><td>End</td><td>Growth</td><td>Reason</td></tr>
+          </thead>
+          <tbody>
+            {{#leaks}}
+            <tr>
+              <td>{{start}}</td>
+              <td>{{end}}</td>
+              <td>{{growth}}</td>
+              <td>{{reason}}</td>
+            </tr>
+            {{/leaks}}
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <h3>Heap dumps</h3>
+        <table class="dumps">
+          <thead>
+            <tr>
+              <td>Time</td>
+              <td>Before</td>
+              <td>After</td>
+              <td>Change</td>
+              <td>Details</td>
+            </tr>
+          </thead>
+          <tbody>
+            {{#diff}}
+            <tr>
+              <td>0</td>
+              <td>{{before.size}}</td>
+              <td>{{after.size}}</td>
+              <td>{{change.size}}</td>
+              <td>
+                <table class="changes">
+                  <thead>
+                    <tr><td>What?</td><td>Size</td></tr>
+                  </thead>
+                  <tbody>
+                    {{#change.details}}
+                    <tr><td>{{what}}</td><td>{{size}}</td></tr>
+                    {{/change.details}}
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            {{/diff}}
+          </tbody>
+        </table>
+      </section>
+    </section>
+    <section>
+      <h2>Top down CPU profile</h2>
+      {{{ prof_table }}}
+    </section>
+    <script src="/static/vendor/d3.v3.min.js" type="text/javascript"></script>
+    <script src="/static/main.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      NP.gc_graph({{{ gc_data }}}, ['current_base', 'estimated_base'], '.base-graph');
+      NP.gc_graph({{{ gc_data }}}, ['usage_trend'], '.usage-trend-graph');
+      NP.gc_graph({{{ gc_data }}}, ['num_full_gc', 'num_inc_gc'], '.num-gc-graph');
+    </script>
+  </body>
+</html>

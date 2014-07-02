@@ -1,0 +1,7 @@
+<tr data-node="{{node.id}}" {{#parent_node}}class="node-{{parent_node.id}} hidden"{{/parent_node}}>
+  <td class="total-time">{{ totalPercent }}%</td>
+  <td class="self-time">{{ selfPercent }}%</td>
+  <td class="function" style="padding-left: {{offset}}px">{{ node.functionName }}</td>
+  <td class="script">{{ node.scriptName }}</td>
+  <td class="line">{{ node.lineNumber }}</td>
+</tr>

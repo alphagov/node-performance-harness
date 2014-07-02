@@ -1,0 +1,14 @@
+<table class="prof">
+  <thead>
+    <tr>
+      <td class="total-time">Total Time</td>
+      <td class="self-time">Self Time</td>
+      <td class="function">Function</td>
+      <td class="script">Script</td>
+      <td class="line">Line</td>
+    </td>
+  </thead>
+  <tbody>
+    {{{ rows }}}
+  </tbody>
+</table>

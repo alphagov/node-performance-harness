@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+
+var docopt = require('docopt').docopt,
+    harness = require('../lib/harness'),
+    viewer = require('../lib/viewer');
+
+
+var doc = [
+      "node-perf",
+      "",
+      "Usage:",
+      "  node-perf run [options] <script>",
+      "  node-perf view <json>",
+      "",
+      "Options:",
+      "  --out=<out_path>  Path to dump JSON. [default: ./out.json]"
+    ].join('\n'),
+    opts = docopt(doc);
+
+
+if (opts.run) {
+  harness.run(opts['<script>'], opts['--out']);
+} else if (opts.view) {
+  viewer.start(opts['<json>']);
+}
+

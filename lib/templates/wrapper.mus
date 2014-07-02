@@ -1,0 +1,61 @@
+
+var memwatch = require('{{{ perf_path }}}/node_modules/memwatch'),
+    profiler = require('{{{ perf_path }}}/node_modules/cpu-profiler'),
+    _ = require('{{{ perf_path }}}/node_modules/lodash');
+
+var start_timestamp = Date.now(),
+    heapdump = new memwatch.HeapDiff();
+
+memwatch.on('stats', function(info) {
+  info.timestamp = Date.now();
+  process.send({ stats: info });
+});
+
+memwatch.on('leak', function(leak) {
+  leak.timestamp = Date.now();
+  process.send({ leak: leak });
+});
+
+profiler.startProfiling('all');
+
+function walkProfNode(node) {
+  var children = [];
+
+  for (var i = 0; i < node.childrenCount; i++) {
+    children.push(walkProfNode(node.getChild(i)));
+  }
+
+  children.sort(function(a, b) {
+    if (a.totalTime > b.totalTime) return -1;
+    else if (a.totalTime < b.totalTime) return 1;
+    else return 0;
+  });
+
+  node.children = children;
+
+  return node;
+}
+
+process.on('SIGTERM', function() {
+  var prof = profiler.stopProfiling('all');
+
+  process.send({ 
+    prof: walkProfNode(prof.topRoot),
+    timespan: {
+      start: start_timestamp,
+      end: Date.now()
+    }
+  });
+  process.exit();
+});
+
+process.on('message', function(message) {
+  if (message === 'heap') {
+    process.send({ diff: heapdump.end() });
+    heapdump = new memwatch.HeapDiff();
+  }
+});
+
+(function() {
+  {{{ script }}}
+})();
