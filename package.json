@@ -16,12 +16,12 @@
   "author": "Government Digital Service",
   "license": "MIT",
   "dependencies": {
-    "memwatch": "~0.2.2",
-    "docopt": "~0.4.0",
-    "mustache": "~0.8.2",
+    "memwatch": "0.2.2",
+    "docopt": "0.4.0",
+    "mustache": "0.8.2",
     "tmp": "0.0.23",
-    "cpu-profiler": "~2.1.1",
-    "lodash": "~2.4.1",
-    "express": "~4.4.4"
+    "cpu-profiler": "2.1.1",
+    "lodash": "2.4.1",
+    "express": "4.4.4"
   }
 }
